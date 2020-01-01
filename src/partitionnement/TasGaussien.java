@@ -119,9 +119,8 @@ public class TasGaussien {
     private static void gnuplotPointsWriter(String graphName, String gnuFileName, String dataFileName, int clusterSizes[]) {
         try {
             FileWriter fw = new FileWriter(gnuFileName + ".gnu");
-            fw.write("set terminal svg size 920,920 \nset output '");
-            fw.write(""+graphName);
-            fw.write(".svg'\nset title \"histo\" \n");
+            fw.write("set hidden3D \n");
+            fw.write("set title \"histo\" \n");
             fw.write("set grid\nset style data points\nsplot");
             for (int pointCluster = 0; pointCluster < clusterSizes.length; pointCluster+= 1){
                 fw.write("'"+dataFileName + ".d' i " + pointCluster + ", ");
