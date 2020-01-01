@@ -122,7 +122,7 @@ public class TasGaussien {
             fw.write("set terminal svg size 920,920 \nset output '");
             fw.write(""+graphName);
             fw.write(".svg'\nset title \"histo\" \n");
-            fw.write("set grid\nset style data points\nplot");
+            fw.write("set grid\nset style data points\nsplot");
             for (int pointCluster = 0; pointCluster < clusterSizes.length; pointCluster+= 1){
                 fw.write("'"+dataFileName + ".d' i " + pointCluster + ", ");
             }
@@ -137,23 +137,26 @@ public class TasGaussien {
 
 
     public static void main(String[] args) {
-        double [][] testRandom = new double[10000][2];
+        double [][] testRandom = new double[10000][3];
 
         Random rn = new Random();
-        double gaussianCenters[][] = new double[2][2];
+        double gaussianCenters[][] = new double[2][3];
         int [] gaussianSizes = new int[gaussianCenters.length];
         double min = -20;
         double max = 20;
         gaussianCenters[0][0] = -2;
         gaussianCenters[0][1] = 2;
+        gaussianCenters[0][2] = 1;
 
         gaussianCenters[1][0] = 5;
         gaussianCenters[1][1] = 0;
+        gaussianCenters[1][2] = -3;
 
         for(int randomIndex = 0; randomIndex < testRandom.length; randomIndex += 1){
             int gaussianIndex = (int) (((float)randomIndex/testRandom.length)* gaussianCenters.length);
             testRandom[randomIndex][0] = gaussianCenters[gaussianIndex][0]+rn.nextGaussian();
             testRandom[randomIndex][1]= gaussianCenters[gaussianIndex][1]+rn.nextGaussian();
+            testRandom[randomIndex][2]= gaussianCenters[gaussianIndex][2]+rn.nextGaussian();
             gaussianSizes[gaussianIndex]+=1;
             System.out.print(""+gaussianIndex+"\n");
 
