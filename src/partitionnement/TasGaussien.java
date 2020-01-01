@@ -115,14 +115,14 @@ public class TasGaussien {
         }
     }
 
-    private static void gnuplotPointsWriter(String plotName, String fileName) {
+    private static void gnuplotPointsWriter(String graphName, String gnuFileName, String dataFileName) {
         try {
-            FileWriter fw = new FileWriter(plotName + ".gnu");
+            FileWriter fw = new FileWriter(gnuFileName + ".gnu");
             fw.write("set terminal svg size 920,920 \nset output '");
-            fw.write(""+plotName);
+            fw.write(""+graphName);
             fw.write(".svg'\nset title \"histo\" \n");
             fw.write("set grid\nset style data points\nplot");
-            fw.write("'"+fileName + ".d'");
+            fw.write("'"+dataFileName + ".d'");
 
             fw.close();
         }
@@ -155,8 +155,7 @@ public class TasGaussien {
             System.out.print(""+gaussianIndex+"\n");
 
         }
-
-        pointFileWriter("twoGaussians",testRandom,gaussianSizes);
-        gnuplotPointsWriter("twoGaussians","twoGaussians");
+        pointFileWriter("generatedFiles/data/twoGaussians",testRandom,gaussianSizes);
+        gnuplotPointsWriter("../graphs/twoGaussians","../gnuplot/twoGaussians","../data/twoGaussians");
     }
 }
