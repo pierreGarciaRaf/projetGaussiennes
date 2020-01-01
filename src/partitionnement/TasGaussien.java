@@ -80,16 +80,17 @@ public class TasGaussien {
             int clusterIdx = 0;
             FileWriter fw = new FileWriter(fileName+".d");
             for (int i = 0; i < points.length; i += 1) {
+                if (idxInCluster == clusterSizes[clusterIdx]){
+                    idxInCluster=0;
+                    fw.write("\n\n");
+                    clusterIdx+=1;
+                }
+                idxInCluster+= 1;
+
                 for (int j = 0; j < points[i].length; j += 1){
                     fw.write("" + points[i][j]+ " ");
                 }
                 fw.write("\n");
-                if (idxInCluster == clusterSizes[clusterIdx]){
-                    idxInCluster=0;
-                    fw.write("\n");
-                    clusterIdx+=1;
-                }
-                idxInCluster+= 1;
             }
             fw.close();
         } catch (IOException e) {
@@ -115,14 +116,16 @@ public class TasGaussien {
         }
     }
 
-    private static void gnuplotPointsWriter(String graphName, String gnuFileName, String dataFileName) {
+    private static void gnuplotPointsWriter(String graphName, String gnuFileName, String dataFileName, int clusterSizes[]) {
         try {
             FileWriter fw = new FileWriter(gnuFileName + ".gnu");
             fw.write("set terminal svg size 920,920 \nset output '");
             fw.write(""+graphName);
             fw.write(".svg'\nset title \"histo\" \n");
             fw.write("set grid\nset style data points\nplot");
-            fw.write("'"+dataFileName + ".d'");
+            for (int pointCluster = 0; pointCluster < clusterSizes.length; pointCluster+= 1){
+                fw.write("'"+dataFileName + ".d' i " + pointCluster + ", ");
+            }
 
             fw.close();
         }
@@ -156,6 +159,8 @@ public class TasGaussien {
 
         }
         pointFileWriter("generatedFiles/data/twoGaussians",testRandom,gaussianSizes);
-        gnuplotPointsWriter("../graphs/twoGaussians","../gnuplot/twoGaussians","../data/twoGaussians");
+        gnuplotPointsWriter("../graphs/twoGaussians",
+                "generatedFiles/gnuplot/twoGaussians",
+                "../data/twoGaussians",gaussianSizes);
     }
 }
