@@ -80,16 +80,17 @@ public class TasGaussien {
             int clusterIdx = 0;
             FileWriter fw = new FileWriter(fileName+".d");
             for (int i = 0; i < points.length; i += 1) {
+                if (idxInCluster == clusterSizes[clusterIdx]){
+                    idxInCluster=0;
+                    fw.write("\n\n");
+                    clusterIdx+=1;
+                }
+                idxInCluster+= 1;
+
                 for (int j = 0; j < points[i].length; j += 1){
                     fw.write("" + points[i][j]+ " ");
                 }
                 fw.write("\n");
-                if (idxInCluster == clusterSizes[clusterIdx]){
-                    idxInCluster=0;
-                    fw.write("\n");
-                    clusterIdx+=1;
-                }
-                idxInCluster+= 1;
             }
             fw.close();
         } catch (IOException e) {
@@ -115,14 +116,15 @@ public class TasGaussien {
         }
     }
 
-    private static void gnuplotPointsWriter(String graphName, String gnuFileName, String dataFileName) {
+    private static void gnuplotPointsWriter(String graphName, String gnuFileName, String dataFileName, int clusterSizes[]) {
         try {
             FileWriter fw = new FileWriter(gnuFileName + ".gnu");
-            fw.write("set terminal svg size 920,920 \nset output '");
-            fw.write(""+graphName);
-            fw.write(".svg'\nset title \"histo\" \n");
-            fw.write("set grid\nset style data points\nplot");
-            fw.write("'"+dataFileName + ".d'");
+            fw.write("set hidden3D \n");
+            fw.write("set title \"histo\" \n");
+            fw.write("set grid\nset style data points\nsplot");
+            for (int pointCluster = 0; pointCluster < clusterSizes.length; pointCluster+= 1){
+                fw.write("'"+dataFileName + ".d' i " + pointCluster + ", ");
+            }
 
             fw.close();
         }
@@ -134,28 +136,33 @@ public class TasGaussien {
 
 
     public static void main(String[] args) {
-        double [][] testRandom = new double[10000][2];
+        double [][] testRandom = new double[10000][3];
 
         Random rn = new Random();
-        double gaussianCenters[][] = new double[2][2];
+        double gaussianCenters[][] = new double[2][3];
         int [] gaussianSizes = new int[gaussianCenters.length];
         double min = -20;
         double max = 20;
         gaussianCenters[0][0] = -2;
         gaussianCenters[0][1] = 2;
+        gaussianCenters[0][2] = 1;
 
         gaussianCenters[1][0] = 5;
         gaussianCenters[1][1] = 0;
+        gaussianCenters[1][2] = -3;
 
         for(int randomIndex = 0; randomIndex < testRandom.length; randomIndex += 1){
             int gaussianIndex = (int) (((float)randomIndex/testRandom.length)* gaussianCenters.length);
             testRandom[randomIndex][0] = gaussianCenters[gaussianIndex][0]+rn.nextGaussian();
             testRandom[randomIndex][1]= gaussianCenters[gaussianIndex][1]+rn.nextGaussian();
+            testRandom[randomIndex][2]= gaussianCenters[gaussianIndex][2]+rn.nextGaussian();
             gaussianSizes[gaussianIndex]+=1;
             System.out.print(""+gaussianIndex+"\n");
 
         }
         pointFileWriter("generatedFiles/data/twoGaussians",testRandom,gaussianSizes);
-        gnuplotPointsWriter("../graphs/twoGaussians","../gnuplot/twoGaussians","../data/twoGaussians");
+        gnuplotPointsWriter("../graphs/twoGaussians",
+                "generatedFiles/gnuplot/twoGaussians",
+                "../data/twoGaussians",gaussianSizes);
     }
 }
