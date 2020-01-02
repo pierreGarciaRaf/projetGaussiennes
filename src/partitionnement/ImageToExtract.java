@@ -3,72 +3,64 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class ImageToExtract {
     String imageFileName;
     String imageSourcePath;
     String dataSourcePath;
+    String gnuplotSourcePath;
 
+    int width;
+    int height;
+
+    FileWriter data;
     BufferedImage bi;
+    static double twoFiveFiveInvert = 1/255.f;
 
-    public ImageToExtract(String imageFileName,String imageSourcePath,String dataSourcePath) throws IOException {
+    public ImageToExtract(String imageFileName,String imageSourcePath,String dataSourcePath,String gnuplotSourcePath) throws IOException {
         this.imageFileName = imageFileName;
         this.imageSourcePath = imageSourcePath;
         this.dataSourcePath = dataSourcePath;
-        bi = ImageIO.read(new File(imageSourcePath+imageFileName));
+        bi = ImageIO.read(new File(imageSourcePath+imageFileName+".png"));
+        width = bi.getWidth();
+        height = bi.getHeight();
+        data = new FileWriter(dataSourcePath + imageFileName + ".d");
+        this.gnuplotSourcePath = gnuplotSourcePath;
     }
     public ImageToExtract(String imageFileName) throws IOException {
-        this(imageFileName,"pictures/","generatedFiles/data/");
+        this(imageFileName,"pictures/","generatedFiles/data/","generatedFiles/gnuplot/");
     }
-    public void extractAllPixelsColorNormalized(){
 
+    /**
+     * @return : creates normalized dataPoints in a .d file and makes the double[][] the learning algo needs.
+     */
+    public double[][] extractAllPixelsColorNormalized() throws IOException {
+        int[] im_pixels = bi.getRGB(0, 0, width, height, null, 0, width);
+        double[][] points = new double[im_pixels.length][3];
+        Color nowColor;
+        for (int pixelIdx = 0; pixelIdx < im_pixels.length; pixelIdx+=1) {
+            nowColor = new Color(im_pixels[pixelIdx]);
+            points[pixelIdx][0] = nowColor.getRed() * twoFiveFiveInvert;
+            points[pixelIdx][1] = nowColor.getGreen() * twoFiveFiveInvert;
+            points[pixelIdx][2] = nowColor.getBlue() * twoFiveFiveInvert;
+            data.write("" + points[pixelIdx][0] + " " + points[pixelIdx][1] + " " + points[pixelIdx][2]
+                    + " " + nowColor.getRed() + " " + nowColor.getGreen() + " " + nowColor.getBlue() + "\n");
+        }
+        return points;
+    }
+
+    public void createGnuPlot() throws IOException {
+        FileWriter gnuplot = new FileWriter(gnuplotSourcePath+imageFileName+".gnu");
+        gnuplot.write("rgb(r,g,b) = int(65536 * r) + int(256 * g) + int(b)\n");
+        gnuplot.write("splot \""+ "../data/" + imageFileName + ".d\" using 1:2:3:(rgb($4,$5,$6)) with points lc rgb variable");
+        gnuplot.close();
     }
     public static void main(String[] args) throws IOException
     {
-        String path = "pictures/";
-        String imageMMS = path + "mms.png";
-
-        // Lecture de l'image ici
-        File imageFile = new File(imageMMS);
-        System.out.println(imageFile.exists());
-        BufferedImage bui = ImageIO.read(imageFile);
-
-        int width = bui.getWidth();
-        int height = bui.getHeight();
-        System.out.println("Hauteur=" + width);
-        System.out.println("Largeur=" + height);
-
-        int pixel = bui.getRGB(0, 0);
-        //System.out.println("Pixel 0,0 = "+pixel);
-        Color c = new Color(pixel);
-        System.out.println("RGB = "+c.getRed()+" "+c.getGreen()+" "+c.getBlue());
-        // Calcul des trois composant de couleurs normalisé à 1
-        double[] pix = new double[3];
-        pix[0] = (double) c.getRed()/255.0;
-        pix[1] = (double) c.getGreen()/255.0;
-        pix[2] = (double) c.getBlue()/255.0;
-        System.out.println("RGB normalisé= "+pix[0]+" "+pix[1]+" "+pix[2]);
-
-        int[] im_pixels = bui.getRGB(0, 0, width, height, null, 0, width);
-
-        /** Creation du tableau **/
-        Color[] tabColor= new Color[im_pixels.length];
-        for(int i=0 ; i<im_pixels.length ; i++)
-            tabColor[i]=new Color(im_pixels[i]);
-
-        /** inversion des couleurs **/
-        for(int i=0 ; i<tabColor.length ; i++)
-            tabColor[i]=new Color(255-tabColor[i].getRed(),255-tabColor[i].getGreen(),255-tabColor[i].getBlue());
-
-        /** sauvegarde de l'image **/
-        BufferedImage bui_out = new BufferedImage(bui.getWidth(),bui.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
-        for(int i=0 ; i<height ; i++)
-        {
-            for(int j=0 ; j<width ; j++)
-                bui_out.setRGB(j,i,tabColor[i*width+j].getRGB());
-        }
-        ImageIO.write(bui_out, "PNG", new File(path+"test.png"));
-
+        ImageToExtract mms = new ImageToExtract("mms");
+        mms.extractAllPixelsColorNormalized();
+        mms.createGnuPlot();
     }
 }

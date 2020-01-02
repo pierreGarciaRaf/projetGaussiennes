@@ -58,7 +58,7 @@ public class TasGaussien {
             }
     }
 
-    private static void pointFileWriter(String fileName, double points[][]){
+        private static void pointFileWriter(String fileName, double points[][]){
         try {
             FileWriter fw = new FileWriter(fileName+".d");
             for (int i = 0; i < points.length; i += 1) {
