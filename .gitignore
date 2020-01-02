@@ -1,1 +1,3 @@
-/generatedFiles/
+#using utf8
+generatedFiles/
+.idea/workspace.xml
