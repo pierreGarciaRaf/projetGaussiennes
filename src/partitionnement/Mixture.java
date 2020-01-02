@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Random;
 
 
-public class mixture {
+public class Mixture {
     private double [][] points;
     private int pointDimension;
     private double [][] centers;
@@ -22,7 +22,7 @@ public class mixture {
      * @param roh
      * @param means
      */
-    public mixture(double[][] point, double[][]center , double[][] sigma, double[]roh, double[][]means){
+    public Mixture(double[][] point, double[][]center , double[][] sigma, double[]roh, double[][]means){
         this.points = point;
         this.centers = center;
         this.pointDimension = point[0].length;
@@ -36,7 +36,7 @@ public class mixture {
      * @param point
      * @param center
      */
-    public mixture(double[][] point, double[][] center){
+    public Mixture(double[][] point, double[][] center){
         this.points = point;
         this.centers = center;
         this.pointDimension = point[0].length;
@@ -89,7 +89,7 @@ public class mixture {
 
     /**
      * fonction process the probability of each point to be associate to a center
-     * @return a 2 dimension double tab where each sub tab represent the prpbability for a point to be associate to each center
+     * @return a 2 dimension double tab where each sub tab represent the probability for a point to be associate to each center
      */
     private double [][] assign(){
         double[][] assign = new double[this.points.length][this.centers.length];
@@ -102,7 +102,7 @@ public class mixture {
     }
 
     /**
-     * the function maj the diffrent mixture parameter's
+     * the function maj the different mixture means
      * @param assignment
      */
     private void majM(double[][] assignment){
@@ -120,7 +120,7 @@ public class mixture {
     }
 
     /**
-     * process the maj of sandard deviation
+     * process the maj of standard deviation
      * @param assignment
      */
     private void majS(double[][] assignment){
@@ -212,7 +212,7 @@ public class mixture {
 
     /**
      * getter
-     * @return standar deviation
+     * @return standard deviation
      */
     private double[][] getSigma(){
         return this.sigma;
