@@ -53,8 +53,6 @@ public class Mixture {
         for(int i = 0; i < this.roh.length; i++){
             roh[i] = Math.random() * (1 - 0);
         }
-
-
     }
 
 
@@ -102,12 +100,12 @@ public class Mixture {
     }
 
     /**
-     * the function maj the different mixture means
+     * the function update the different mixture means
      * @param assignment
      */
-    private void majM(double[][] assignment){
+    private void updateM(double[][] assignment){
         for(int centeridx = 0; centeridx < this.centers.length; centeridx++){
-            //maj means
+            //update means
             for(int dimidx = 0; dimidx < this.pointDimension; dimidx++){
                 double summeans = 0;
                 for(int pointidx = 0;  pointidx < this.points.length; pointidx++){
@@ -120,12 +118,12 @@ public class Mixture {
     }
 
     /**
-     * process the maj of standard deviation
+     * process the update of standard deviation
      * @param assignment
      */
-    private void majS(double[][] assignment){
+    private void updateS(double[][] assignment){
         for(int centeridx = 0; centeridx < this.centers.length; centeridx++){
-            // maj sigma
+            // update sigma
             for(int dimidx = 0; dimidx < this.pointDimension; dimidx++){
                 double sumsigma = 0;
                 for(int pointidx = 0;  pointidx < this.points.length; pointidx++){
@@ -139,12 +137,12 @@ public class Mixture {
 
 
     /**
-     * process the maj of density
+     * process the update of density
      */
-    private void majR(){
+    private void updateR(){
 
         for(int centeridx = 0; centeridx < this.centers.length; centeridx++){
-            //maj roh
+            //update roh
             this.roh[centeridx] = this.Rk[centeridx]/this.points.length;
         }
 
@@ -152,10 +150,10 @@ public class Mixture {
 
 
     /**
-     * process the maj Rk
+     * calculates Rk for next update
      * @param assignment
      */
-    private void majRk(double[][] assignment){
+    private void updateRk(double[][] assignment){
         //Rk
         for(int centeridx = 0; centeridx < this.centers.length; centeridx++){
             this.Rk[centeridx] = 0;
@@ -168,26 +166,26 @@ public class Mixture {
     }
 
     /**
-     * process the maj of all parametter
+     * process the update of all parametter
      * @param assignment
      */
-    private void maj(double[][] assignment){
-        majRk(assignment);
-        majM(assignment);
-        majS(assignment);
-        majR();
+    private void update(double[][] assignment){
+        updateRk(assignment);
+        updateM(assignment);
+        updateS(assignment);
+        updateR();
 
     }
 
 
     /**
-     * process at nb maj on the data
+     * process at nb update on the data
      * @param nb
      */
     public void epoque(int nb){
         for(int i = 0; i < nb; i++){
             double[][] assign = this.assign();
-            this.maj(assign);
+            this.update(assign);
         }
     }
 
