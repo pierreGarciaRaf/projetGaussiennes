@@ -12,7 +12,7 @@ public class Mixture {
     private double[][] sigma;
     private double[] roh;
     private double[][] means;
-    private double[] Rk = new double[this.centers.length];
+    private double[] Rk;
 
     /**
      * constructor
@@ -28,7 +28,8 @@ public class Mixture {
         this.pointDimension = point[0].length;
         this.sigma = sigma;
         this.roh = roh;
-        this.means = means;
+        this.Rk = new double[this.centers.length];
+        this.means = center;
     }
 
     /**
@@ -40,11 +41,10 @@ public class Mixture {
         this.points = point;
         this.centers = center;
         this.pointDimension = point[0].length;
-        for(int i = 0; i < this.means.length; i++){
-            for(int j = 0; j < this.means[0].length; j++){
-                this.means[i][j] = (double)(Math.random() * (1 - 0));
-            }
-        }
+        this.Rk = new double[this.centers.length];
+        this.means = this.centers;
+        this.sigma = new double[this.centers.length][this.pointDimension];
+        this.roh = new double[this.centers.length];
         for(int i = 0; i < this.sigma.length; i++){
             for(int j = 0; j <this.sigma[0].length; j++){
                 this.sigma[i][j] = (double)(1 + Math.random() * (5 - 1));
@@ -174,7 +174,6 @@ public class Mixture {
         updateM(assignment);
         updateS(assignment);
         updateR();
-
     }
 
 
@@ -212,7 +211,7 @@ public class Mixture {
      * getter
      * @return standard deviation
      */
-    private double[][] getSigma(){
+    public double[][] getSigma(){
         return this.sigma;
     }
 
@@ -220,7 +219,7 @@ public class Mixture {
      * getter
      * @return means
      */
-    private double[][] getMeans(){
+    public double[][] getMeans(){
         return this.means;
     }
 
@@ -228,7 +227,7 @@ public class Mixture {
      * getter
      * @return density
      */
-    private double[] getRoh(){
+    public double[] getRoh(){
         return this.roh;
     }
 }
