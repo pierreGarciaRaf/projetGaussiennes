@@ -90,6 +90,7 @@ public class CenterCreator {
     public void writeCenters(String fileName) throws IOException {
         FileWriter fw = new FileWriter("generatedFiles/data/" + fileName+".d");
         for (int centerIdx = 0; centerIdx < centersLocation.length; centerIdx += 1){
+            fw.write("1 ");
             for (int dimIdx = 0; dimIdx < centersLocation[centerIdx].length; dimIdx += 1) {
                 fw.write(""+centersLocation[centerIdx][dimIdx] + ' ');
             }
