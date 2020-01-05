@@ -17,6 +17,8 @@ public class main {
         centers =  center.generateSpacedCenters(point);
         Mixture mix = new Mixture(point, centers);
         mix.epoque(50);
+        MixtureGrapher mg = new MixtureGrapher(mix,"mms","first");
+        mg.createAllFiles();
         for(int i = 0; i < mix.getMeans().length; i++){
             System.out.println("");
             System.out.print("le centre " + i + " a pour coordonée: ");

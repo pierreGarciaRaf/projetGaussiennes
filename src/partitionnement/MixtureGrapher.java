@@ -7,8 +7,8 @@ public class MixtureGrapher {
     Mixture m;
     String dataFile;
     String finalFile;
-    String dataPath = "generated/data/";
-    String gnuplotPath = "generated/gnuplot/";
+    String dataPath = "generatedFiles/data/";
+    String gnuplotPath = "generatedFiles/gnuplot/";
     MixtureGrapher(Mixture m, String dataFile, String finalFile){
         this.m = m;
         this.dataFile = dataFile;
@@ -16,7 +16,7 @@ public class MixtureGrapher {
     }
 
     public void createCentersFile() throws IOException {
-        FileWriter centersFile = new FileWriter(dataPath+finalFile+".gnu");
+        FileWriter centersFile = new FileWriter(dataPath+finalFile+".d");
         double[][] centers = m.getMeans();
         double[][] sigmas = m.getSigma();
         double sigmaTempMean = 0;
@@ -27,16 +27,17 @@ public class MixtureGrapher {
                 centersFile.write("" + centers[centerIdx][i] + " ");
                 sigmaTempMean += sigmas[centerIdx][i] * sigmas[centerIdx][i];
             }
-            centersFile.write("" + 10*Math.pow(sigmaTempMean,0.5) + " " +(int)(255 * densities[centerIdx]));
+            centersFile.write("" + 10*Math.pow(sigmaTempMean,0.5) + " " +(int)(255 * densities[centerIdx]) + "\n");
             sigmaTempMean = 0;
         }
+        centersFile.close();
     }
 
     public void createGnuPlot() throws IOException {
         FileWriter gnuplot = new FileWriter(gnuplotPath+finalFile+".gnu");
         gnuplot.write("rgb(r,g,b) = int(65536 * r) + int(256 * g) + int(b)\n");
-        gnuplot.write("splot \"../data/" + dataFile + ".d\" using 1:2:3:(rgb($4,$5,$6)) with points lc rgb variable,\\ \n");
-        gnuplot.write("splot \" ../data/" + finalFile + ".d\" using 1:2:3:4:(rgb($5,$5,$5)) pt 7 ps variable lc rgb variable");
+        gnuplot.write("splot \"../data/" + dataFile + ".d\" using 1:2:3:(rgb($4,$5,$6)) with points lc rgb variable,\\\n");
+        gnuplot.write("      \"../data/" + finalFile + ".d\" using 1:2:3:4:(rgb($5,$5,$5)) pt 7 ps variable lc rgb variable");
         gnuplot.close();
     }
 
