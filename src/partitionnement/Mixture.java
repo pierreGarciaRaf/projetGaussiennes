@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Random;
 
 
-public class mixture {
+public class Mixture {
     private double [][] points;
     private int pointDimension;
     private double [][] centers;
@@ -22,7 +22,7 @@ public class mixture {
      * @param roh
      * @param means
      */
-    public mixture(double[][] point, double[][]center , double[][] sigma, double[]roh, double[][]means){
+    public Mixture(double[][] point, double[][]center , double[][] sigma, double[]roh, double[][]means){
         this.points = point;
         this.centers = center;
         this.pointDimension = point[0].length;
@@ -36,7 +36,7 @@ public class mixture {
      * @param point
      * @param center
      */
-    public mixture(double[][] point, double[][] center){
+    public Mixture(double[][] point, double[][] center){
         this.points = point;
         this.centers = center;
         this.pointDimension = point[0].length;
@@ -47,14 +47,12 @@ public class mixture {
         }
         for(int i = 0; i < this.sigma.length; i++){
             for(int j = 0; j <this.sigma[0].length; j++){
-                this.sigma[i][j] = (double)(Math.random() * (5 - 1));
+                this.sigma[i][j] = (double)(1 + Math.random() * (5 - 1));
             }
         }
         for(int i = 0; i < this.roh.length; i++){
             roh[i] = Math.random() * (1 - 0);
         }
-
-
     }
 
 
@@ -89,7 +87,7 @@ public class mixture {
 
     /**
      * fonction process the probability of each point to be associate to a center
-     * @return a 2 dimension double tab where each sub tab represent the prpbability for a point to be associate to each center
+     * @return a 2 dimension double tab where each sub tab represent the probability for a point to be associate to each center
      */
     private double [][] assign(){
         double[][] assign = new double[this.points.length][this.centers.length];
@@ -102,12 +100,12 @@ public class mixture {
     }
 
     /**
-     * the function maj the diffrent mixture parameter's
+     * the function update the different mixture means
      * @param assignment
      */
-    private void majM(double[][] assignment){
+    private void updateM(double[][] assignment){
         for(int centeridx = 0; centeridx < this.centers.length; centeridx++){
-            //maj means
+            //update means
             for(int dimidx = 0; dimidx < this.pointDimension; dimidx++){
                 double summeans = 0;
                 for(int pointidx = 0;  pointidx < this.points.length; pointidx++){
@@ -120,12 +118,12 @@ public class mixture {
     }
 
     /**
-     * process the maj of sandard deviation
+     * process the update of standard deviation
      * @param assignment
      */
-    private void majS(double[][] assignment){
+    private void updateS(double[][] assignment){
         for(int centeridx = 0; centeridx < this.centers.length; centeridx++){
-            // maj sigma
+            // update sigma
             for(int dimidx = 0; dimidx < this.pointDimension; dimidx++){
                 double sumsigma = 0;
                 for(int pointidx = 0;  pointidx < this.points.length; pointidx++){
@@ -139,12 +137,12 @@ public class mixture {
 
 
     /**
-     * process the maj of density
+     * process the update of density
      */
-    private void majR(){
+    private void updateR(){
 
         for(int centeridx = 0; centeridx < this.centers.length; centeridx++){
-            //maj roh
+            //update roh
             this.roh[centeridx] = this.Rk[centeridx]/this.points.length;
         }
 
@@ -152,10 +150,10 @@ public class mixture {
 
 
     /**
-     * process the maj Rk
+     * calculates Rk for next update
      * @param assignment
      */
-    private void majRk(double[][] assignment){
+    private void updateRk(double[][] assignment){
         //Rk
         for(int centeridx = 0; centeridx < this.centers.length; centeridx++){
             this.Rk[centeridx] = 0;
@@ -168,26 +166,26 @@ public class mixture {
     }
 
     /**
-     * process the maj of all parametter
+     * process the update of all parametter
      * @param assignment
      */
-    private void maj(double[][] assignment){
-        majRk(assignment);
-        majM(assignment);
-        majS(assignment);
-        majR();
+    private void update(double[][] assignment){
+        updateRk(assignment);
+        updateM(assignment);
+        updateS(assignment);
+        updateR();
 
     }
 
 
     /**
-     * process at nb maj on the data
+     * process at nb update on the data
      * @param nb
      */
     public void epoque(int nb){
         for(int i = 0; i < nb; i++){
             double[][] assign = this.assign();
-            this.maj(assign);
+            this.update(assign);
         }
     }
 
@@ -212,7 +210,7 @@ public class mixture {
 
     /**
      * getter
-     * @return standar deviation
+     * @return standard deviation
      */
     private double[][] getSigma(){
         return this.sigma;

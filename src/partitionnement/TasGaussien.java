@@ -58,7 +58,7 @@ public class TasGaussien {
             }
     }
 
-    private static void pointFileWriter(String fileName, double points[][]){
+        private static void pointFileWriter(String fileName, double points[][]){
         try {
             FileWriter fw = new FileWriter(fileName+".d");
             for (int i = 0; i < points.length; i += 1) {
@@ -119,7 +119,6 @@ public class TasGaussien {
     private static void gnuplotPointsWriter(String graphName, String gnuFileName, String dataFileName, int clusterSizes[]) {
         try {
             FileWriter fw = new FileWriter(gnuFileName + ".gnu");
-            fw.write("set hidden3D \n");
             fw.write("set title \"histo\" \n");
             fw.write("set grid\nset style data points\nsplot");
             for (int pointCluster = 0; pointCluster < clusterSizes.length; pointCluster+= 1){
