@@ -138,12 +138,16 @@ public class main {
             }
             System.out.println("");
         }
+        double[] Xs = new double[10];
+
         double[] scores = new double[10];
-        FileWriter fw = new FileWriter("generatedFiles/data/deuxDims.d");
         for (int k = 1; k < 11; k +=1){
-            fw.write(""+moyenneScore(k,data));
+            Xs[k-1] = k;
+            scores[k-1] = moyenneScore(k,data);
         }
-        fw.close();
+        graph2D g2 = new graph2D("scoreOnNumberOfPerceptrons",Xs,scores);
+
+        g2.execute();
     }
 
     public static void main(String[] arg) throws IOException {
