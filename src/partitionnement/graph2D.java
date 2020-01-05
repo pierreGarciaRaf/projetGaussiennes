@@ -8,7 +8,7 @@ public class graph2D {
     double dataX[];
     double dataY[];
     String dataPath = "generatedFiles/data/";
-    String gnuPath = "generatedFiles/gnuplot";
+    String gnuPath = "generatedFiles/gnuplot/";
     String graphPath = "../graphs";
 
     public graph2D(String dataName, double dataX[], double dataY[]){
