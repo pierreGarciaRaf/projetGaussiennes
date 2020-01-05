@@ -132,12 +132,6 @@ public class main {
 
     public static void question4() throws IOException {
         double [][] data = dotDExtractor("generatedFiles/data/gmm_data.d");
-        for (int i = 0; i < data.length; i +=1){
-            for (int k = 0; k < data[i].length; k += 1){
-                System.out.print(""+data[i][k] + " ");
-            }
-            System.out.println("");
-        }
         double[] Xs = new double[10];
 
         double[] scores = new double[10];
@@ -145,7 +139,7 @@ public class main {
             Xs[k-1] = k;
             scores[k-1] = moyenneScore(k,data);
         }
-        graph2D g2 = new graph2D("scoreOnNumberOfPerceptrons",Xs,scores);
+        graph2D g2 = new graph2D("scoreOnNumberOfGaussians",Xs,scores);
 
         g2.execute();
     }
