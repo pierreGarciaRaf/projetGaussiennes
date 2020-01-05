@@ -1,5 +1,7 @@
 package partitionnement;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
 
 public class CenterCreator {
@@ -84,8 +86,29 @@ public class CenterCreator {
         return giveCenters();
     }
 
-    public static void main(){
-        System.out.println("CentersCreator's test");
+    public void writeCenters(String fileName) throws IOException {
+        FileWriter fw = new FileWriter("generatedFiles/data/" + fileName+".d");
+        for (int centerIdx = 0; centerIdx < centersLocation.length; centerIdx += 1){
+            for (int dimIdx = 0; dimIdx < centersLocation[centerIdx].length; dimIdx += 1) {
+                fw.write(""+centersLocation[centerIdx][dimIdx] + ' ');
+            }
+            fw.write('\n');
+        }
+        fw.close();
+    }
 
+    public static void main(String[] args) throws IOException {
+        System.out.println("CentersCreator's test");
+        double[][] data = (new ImageToExtract("mms")).extractAllPixelsColorNormalized();
+        CenterCreator cc = new CenterCreator(10,data[0].length);
+        double[][] centers = cc.generateSpacedCenters(data);
+        for (int i = 0; i < centers.length; i += 1){
+            System.out.print("\n{");
+            for (int j = 0; j < centers[i].length; j += 1){
+                System.out.print(centers[i][j] + ' ');
+            }
+            System.out.println('}');
+        }
+        cc.writeCenters("centersMms");
     }
 }
