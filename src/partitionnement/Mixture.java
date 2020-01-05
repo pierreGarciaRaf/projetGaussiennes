@@ -230,5 +230,5 @@ public class Mixture {
     public double[] getRoh(){
         return this.roh;
     }
-    public double[][] getData(){return this.points};
+    public double[][] getData(){return this.points;};
 }
