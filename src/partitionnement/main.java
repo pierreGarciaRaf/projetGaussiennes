@@ -19,10 +19,12 @@ public class main {
         mix.epoque(50);
         for(int i = 0; i < mix.getMeans().length; i++){
             System.out.println("");
-            System.out.print("le centre " + i + " a pour coordonnée: ");
+            System.out.print("le centre " + i + " a pour coordonée: ");
             for(int j = 0; j < mix.getMeans()[0].length; j++){
                 System.out.print(mix.getMeans()[i][j] + ", ");
             }
         }
     }
+
+
 }

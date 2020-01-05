@@ -65,7 +65,7 @@ public class Mixture {
     private double prod(double[] point, int k){
         double prod = 1;
         for(int i = 0; i < this.pointDimension; i++){
-            prod *= 1/Math.sqrt(2 * Math.PI * Math.pow(this.sigma[k][i], 2)) * (Math.exp(Math.pow(point[i] - this.means[k][i], 2))/(2 * Math.pow(this.sigma[k][i], 2)));
+            prod *= (1/Math.sqrt(2 * Math.PI * Math.pow(this.sigma[k][i], 2))) * ((Math.exp(-(Math.pow(point[i] - this.means[k][i], 2)/(2 * Math.pow(this.sigma[k][i], 2))))));
         }
         return prod;
     }
@@ -131,7 +131,6 @@ public class Mixture {
                 }
                 this.sigma[centeridx][dimidx] = Math.pow(sumsigma/this.Rk[centeridx],0.5);
             }
-
         }
     }
 
@@ -230,5 +229,6 @@ public class Mixture {
     public double[] getRoh(){
         return this.roh;
     }
+
     public double[][] getData(){return this.points;};
 }
