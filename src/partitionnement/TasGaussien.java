@@ -157,7 +157,6 @@ public class TasGaussien {
             testRandom[randomIndex][2]= gaussianCenters[gaussianIndex][2]+rn.nextGaussian();
             gaussianSizes[gaussianIndex]+=1;
             System.out.print(""+gaussianIndex+"\n");
-
         }
         pointFileWriter("generatedFiles/data/twoGaussians",testRandom,gaussianSizes);
         gnuplotPointsWriter("../graphs/twoGaussians",
