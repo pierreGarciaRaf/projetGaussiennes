@@ -47,7 +47,7 @@ public class Mixture {
         }
         for(int i = 0; i < this.sigma.length; i++){
             for(int j = 0; j <this.sigma[0].length; j++){
-                this.sigma[i][j] = (double)(Math.random() * (5 - 1));
+                this.sigma[i][j] = (double)(1 + Math.random() * (5 - 1));
             }
         }
         for(int i = 0; i < this.roh.length; i++){
