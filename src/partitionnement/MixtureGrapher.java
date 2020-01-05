@@ -27,7 +27,7 @@ public class MixtureGrapher {
                 centersFile.write("" + centers[centerIdx][i] + " ");
                 sigmaTempMean += sigmas[centerIdx][i] * sigmas[centerIdx][i];
             }
-            centersFile.write("" + Math.pow(sigmaTempMean,0.5) + " " +(int)(255 * densities[centerIdx]));
+            centersFile.write("" + 10*Math.pow(sigmaTempMean,0.5) + " " +(int)(255 * densities[centerIdx]));
             sigmaTempMean = 0;
         }
     }
