@@ -57,7 +57,7 @@ public class main {
 
     public static double moyenneScore(int nombreCentres, double [][] data){
         double sum = 0;
-        for (int i =0; i < 20; i += 1){
+        for (int i =0; i < 10; i += 1){
             CenterCreator center = new CenterCreator(nombreCentres, 2);
             double[][] centers = new double[10][2];
             centers =  center.generateSpacedCenters(data);
@@ -81,7 +81,7 @@ public class main {
         for (int k = 1; k < 11; k +=1){
             fw.write(""+moyenneScore(k,data));
         }
-
+        fw.close();
     }
 
     public static void main(String[] arg) throws IOException {
