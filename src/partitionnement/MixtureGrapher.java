@@ -15,19 +15,29 @@ public class MixtureGrapher {
         this.finalFile = finalFile;
     }
 
+    private double max(double a,double b ){
+        return (a>b)? a:b;
+    }
+    private double max(double [] tab){
+        double max = tab[0];
+        for (int i = 1 ; i <tab.length; i += 1){
+            max = max(tab[i],max);
+        }
+        return max;
+    }
     public void createCentersFile() throws IOException {
         FileWriter centersFile = new FileWriter(dataPath+finalFile+".d");
         double[][] centers = m.getMeans();
         double[][] sigmas = m.getSigma();
         double sigmaTempMean = 0;
         double[] densities = m.getRoh();
-
+        double densityMax = max(densities);
         for (int centerIdx = 0; centerIdx < centers.length; centerIdx += 1){
             for (int i = 0; i < centers[centerIdx].length; i  += 1){
                 centersFile.write("" + centers[centerIdx][i] + " ");
                 sigmaTempMean += sigmas[centerIdx][i] * sigmas[centerIdx][i];
             }
-            centersFile.write("" + 10*Math.pow(sigmaTempMean,0.5) + " " +(int)(255 * densities[centerIdx]) + "\n");
+            centersFile.write("" + 10*Math.pow(sigmaTempMean,0.5) + " " +(int)(255 * densities[centerIdx]/densityMax) + "\n");
             sigmaTempMean = 0;
         }
         centersFile.close();

@@ -16,7 +16,7 @@ public class main {
         }
         centers =  center.generateSpacedCenters(point);
         Mixture mix = new Mixture(point, centers);
-        mix.epoque(50);
+        mix.epoque(4);
         MixtureGrapher mg = new MixtureGrapher(mix,"mms","first");
         mg.createAllFiles();
         for(int i = 0; i < mix.getMeans().length; i++){
